@@ -2,13 +2,13 @@
 
 ## Project Overview
 
-This project seeks to answer whether publicly reported CMS hospital readmission performance data can be used to classify hospital-measure records with excess readmission ratios above 1.0. The workflow focuses on leakage-aware healthcare analytics modeling using structured public reporting data from the CMS Hospital Readmissions Reduction Program (HRRP).
+This project seeks to answer whether publicly reported CMS hospital readmission performance data can be used to classify hospital-measure records with excess readmission ratios above 1.0. The workflow focuses on healthcare analytics modeling, using structured public reporting data from the CMS Hospital Readmissions Reduction Program (HRRP), while avoiding any sort of leakage.
 
 The project includes:
 
 * structural data validation
 * missing value analysis
-* leakage-aware feature selection
+* Leakage-aware feature selection 
 * binary target construction
 * exploratory analysis
 * preprocessing pipelines
@@ -20,13 +20,13 @@ Two classification models were evaluated:
 * Logistic Regression
 * Decision Tree
 
-The project emphasizes realistic healthcare analytics methodology rather than maximizing predictive performance through leakage-heavy variables.
+The project focuses on having a realistic healthcare analytics methodology, instead of maximizing predictive performance using variables exposing the model to leakage.
 
 ---
 
 # Business / Healthcare Context
 
-Hospital readmission performance is an important healthcare quality and reimbursement metric tracked by the Centers for Medicare & Medicaid Services (CMS). Excess readmissions may indicate operational inefficiencies, discharge planning issues, care coordination gaps, or broader population-level healthcare challenges.
+Hospital readmission performance is an important healthcare quality and reimbursement metric tracked by the Centers for Medicare & Medicaid Services (CMS). Excess readmissions may symbolize operational inefficiencies, discharge planning issues, care coordination gaps, or broader healthcare population challenges.
 
 CMS publicly reports hospital readmission performance through the Hospital Readmissions Reduction Program (HRRP), which evaluates hospitals across several clinical measures.
 
@@ -71,13 +71,13 @@ high_excess_readmission = 1 if ERR > 1.0
 high_excess_readmission = 0 if ERR <= 1.0
 ```
 
-The classification task focuses on identifying hospital-measure records associated with higher-than-expected readmission performance.
+The classification portion identifies hospital-measure records associated with higher-than-expected readmission performance.
 
 ---
 
-# Important Framing
+#Warning & Key Disclaimer 
 
-This project is intentionally framed as a:
+This project intentionally serves as a:
 
 > hospital-measure-level healthcare analytics classification task
 
@@ -87,7 +87,7 @@ It is **not**:
 * clinical diagnosis prediction
 * causal inference analysis
 
-The models classify publicly reported CMS hospital-measure records using operational/contextual variables. Results should be interpreted as associations within aggregated public reporting data rather than direct explanations of clinical quality outcomes.
+The models classify publicly reported CMS hospital-measure records using operational/contextual variables. The results reflect associations within aggregated public data, rather than direct explanations of clinical quality outcomes.
 
 ---
 

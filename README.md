@@ -1,0 +1,367 @@
+# Hospital Excess Readmission Classification Using CMS HRRP Data
+
+## Project Overview
+
+This project seeks to answer whether publicly reported CMS hospital readmission performance data can be used to classify hospital-measure records with excess readmission ratios above 1.0. The workflow focuses on leakage-aware healthcare analytics modeling using structured public reporting data from the CMS Hospital Readmissions Reduction Program (HRRP).
+
+The project includes:
+
+* structural data validation
+* missing value analysis
+* leakage-aware feature selection
+* binary target construction
+* exploratory analysis
+* preprocessing pipelines
+* supervised classification modeling
+* model comparison and evaluation
+
+Two classification models were evaluated:
+
+* Logistic Regression
+* Decision Tree
+
+The project emphasizes realistic healthcare analytics methodology rather than maximizing predictive performance through leakage-heavy variables.
+
+---
+
+# Business / Healthcare Context
+
+Hospital readmission performance is an important healthcare quality and reimbursement metric tracked by the Centers for Medicare & Medicaid Services (CMS). Excess readmissions may indicate operational inefficiencies, discharge planning issues, care coordination gaps, or broader population-level healthcare challenges.
+
+CMS publicly reports hospital readmission performance through the Hospital Readmissions Reduction Program (HRRP), which evaluates hospitals across several clinical measures.
+
+This project investigates whether broad operational and contextual variables can help classify hospital-measure records with excess readmission performance above expected levels.
+
+---
+
+# Dataset
+
+**Dataset:** CMS Hospital Readmissions Reduction Program (HRRP)
+**Source:** CMS Provider Data
+**Link:** [https://data.cms.gov/provider-data/dataset/9n3s-kdb3#data-table](https://data.cms.gov/provider-data/dataset/9n3s-kdb3#data-table)
+
+### Original Dataset
+
+* **Rows:** 18,330
+* **Columns:** 12
+
+### Final Modeling Dataset
+
+* **Rows:** 8,037
+* **Columns:** 4
+
+### Data Grain
+
+Each row represents a:
+
+> hospital-measure reporting record
+
+This is not patient-level data.
+
+---
+
+# Project Objective
+
+The objective of this project was to build a binary classification model that predicts whether a hospital-measure record has an excess readmission ratio above 1.0.
+
+### Binary Target Definition
+
+```python
+high_excess_readmission = 1 if ERR > 1.0
+high_excess_readmission = 0 if ERR <= 1.0
+```
+
+The classification task focuses on identifying hospital-measure records associated with higher-than-expected readmission performance.
+
+---
+
+# Important Framing
+
+This project is intentionally framed as a:
+
+> hospital-measure-level healthcare analytics classification task
+
+It is **not**:
+
+* patient-level readmission prediction
+* clinical diagnosis prediction
+* causal inference analysis
+
+The models classify publicly reported CMS hospital-measure records using operational/contextual variables. Results should be interpreted as associations within aggregated public reporting data rather than direct explanations of clinical quality outcomes.
+
+---
+
+# Tools Used
+
+* Python
+* pandas
+* scikit-learn
+* matplotlib
+* Jupyter Notebook
+* Parquet
+* Git / GitHub
+
+---
+
+# Repository Structure
+
+```text
+Hospital-Excess-Readmission-Classification/
+│
+├── notebooks/
+│   ├── 01_data_cleaning_and_structural_validation.ipynb
+│   ├── 02_target_definition_and_eda.ipynb
+│   └── 03_classification_modeling.ipynb
+│
+├── visuals/
+│   └── roc_curve_logistic_regression.png
+│
+├── README.md
+├── requirements.txt
+└── .gitignore
+```
+
+> The `data/` directory is excluded from GitHub because the original dataset is publicly available from CMS.
+
+---
+
+# Data Cleaning and Structural Validation
+
+The project began with structural validation and cleaning of the CMS HRRP dataset.
+
+### Cleaning Steps Included
+
+* standardized column names
+* duplicate checks
+* missing value analysis
+* structural validation of data types
+* investigation of CMS footnote reporting behavior
+* filtering rows with valid excess readmission ratio values
+
+### Missing Value Investigation
+
+Several variables contained structurally missing values tied to CMS reporting rules and suppression logic.
+
+Common CMS footnotes included:
+
+* “Too few cases”
+* “Results not available”
+* “Reporting periods incomplete”
+
+Rows missing the target variable (`excess_readmission_ratio`) were excluded from supervised modeling.
+
+### Dataset Reduction
+
+* Original rows: **18,330**
+* Rows with valid ERR values: **11,720**
+* Final modeling dataset: **8,037**
+
+---
+
+# Target Definition
+
+The target variable was created using the hospital’s excess readmission ratio (ERR).
+
+### Classification Logic
+
+* `ERR > 1.0` → high excess readmission
+* `ERR <= 1.0` → non-high excess readmission
+
+The target classes remained reasonably balanced after filtering:
+
+* approximately 54% positive class
+* approximately 46% negative class
+
+Because ERR values were densely concentrated near 1.0, the classification boundary was structurally difficult.
+
+---
+
+# Feature Selection and Leakage Prevention
+
+A conservative feature selection strategy was intentionally used to reduce target leakage.
+
+## Included Features
+
+* `state`
+* `measure_name`
+* `number_of_discharges`
+
+These variables represent broad operational and contextual hospital-measure characteristics.
+
+## Excluded Variables
+
+The following variables were excluded due to leakage concerns or weak analytical value:
+
+* `excess_readmission_ratio`
+* `predicted_readmission_rate`
+* `expected_readmission_rate`
+* `number_of_readmissions`
+* `facility_id`
+* `facility_name`
+* `footnote`
+* reporting date fields
+
+### Why Leakage Prevention Matters
+
+Several excluded variables are mathematically or operationally tied to the target variable. Including them could artificially inflate model performance without improving real generalization ability.
+
+This project prioritizes methodological defensibility over maximizing predictive accuracy.
+
+---
+
+# Modeling Approach
+
+The dataset was split using:
+
+* 80/20 train-test split
+* stratified target distribution
+* fixed random state for reproducibility
+
+The same train-test split was used across all models.
+
+## Logistic Regression
+
+The Logistic Regression workflow included:
+
+* `OneHotEncoder` for categorical features
+* `StandardScaler` for numeric features
+* scikit-learn preprocessing pipeline
+
+This model served as the primary baseline classifier due to:
+
+* interpretability
+* stability
+* strong generalization behavior
+
+## Decision Tree
+
+Several Decision Tree configurations were tested:
+
+* default one-hot encoded tree
+* constrained tree with reduced depth
+* ordinal-encoded tree
+
+The Decision Tree experiments explored:
+
+* non-linear split behavior
+* preprocessing tradeoffs
+* overfitting behavior
+* model complexity control
+
+---
+
+# Model Results
+
+| Model                   | Accuracy | Precision | Recall | F1-score | ROC-AUC |
+| ----------------------- | -------: | --------: | -----: | -------: | ------: |
+| Logistic Regression     |    0.591 |      0.59 |   0.77 |     0.67 |   0.618 |
+| Decision Tree (Ordinal) |    0.579 |      0.57 |   0.84 |     0.68 |   0.606 |
+
+### Overfitting Observation
+
+The unconstrained Decision Tree achieved:
+
+* approximately **97.4% training accuracy**
+* approximately **56.1% testing accuracy**
+
+This large train-test gap demonstrated severe overfitting behavior.
+
+---
+
+# Key Findings
+
+* Logistic Regression provided the strongest overall balance of interpretability, stability, and generalization performance.
+* The Decision Tree achieved stronger positive-class recall but produced substantially more false positives.
+* Model performance remained modest across all evaluated approaches.
+* The classification task was structurally difficult because ERR values clustered densely around the 1.0 threshold.
+* Conservative feature selection reduced leakage but limited predictive signal.
+
+The project demonstrates that realistic healthcare analytics workflows often produce modest performance when leakage-heavy variables are intentionally excluded.
+
+---
+
+# Limitations
+
+Several limitations should be considered when interpreting this project.
+
+## Aggregated Public Reporting Data
+
+The dataset contains hospital-measure-level reporting records rather than patient-level clinical data.
+
+## Limited Feature Space
+
+Only a small set of operational/contextual variables was used:
+
+* state
+* measure name
+* discharge volume
+
+## Leakage-Aware Constraints
+
+Several potentially predictive variables were intentionally excluded because they were directly tied to target construction.
+
+## Structurally Difficult Classification Boundary
+
+ERR values were tightly concentrated near 1.0, creating substantial overlap between target classes.
+
+## Structural Missingness
+
+CMS suppression rules created structurally missing values for some hospitals and measures.
+
+## No Causal Interpretation
+
+The models identify statistical classification patterns within public reporting data and should not be interpreted as causal explanations of hospital quality.
+
+---
+
+# How to Run This Project
+
+1. Clone the repository
+
+```bash
+git clone <repository-link>
+```
+
+2. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+3. Download the CMS HRRP dataset from:
+
+[https://data.cms.gov/provider-data/dataset/9n3s-kdb3#data-table](https://data.cms.gov/provider-data/dataset/9n3s-kdb3#data-table)
+
+4. Place the dataset inside:
+
+```text
+data/raw/
+```
+
+5. Run notebooks in order:
+
+```text
+01_data_cleaning_and_structural_validation.ipynb
+02_target_definition_and_eda.ipynb
+03_classification_modeling.ipynb
+```
+
+---
+
+# Future Improvements
+
+Potential future improvements include:
+
+* integrating additional CMS hospital characteristics datasets
+* adding socioeconomic or regional healthcare variables
+* testing Random Forest or Gradient Boosting models
+* performing systematic hyperparameter tuning
+* using cross-validation
+* exploring probability threshold tuning for recall/precision tradeoffs
+
+---
+
+# Author
+
+Created by Gurbaj Singh
+Healthcare Data Analytics Portfolio Project

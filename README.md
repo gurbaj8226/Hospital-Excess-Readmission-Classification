@@ -214,8 +214,8 @@ This project prioritizes methodological defensibility over maximizing predictive
 The dataset was split using:
 
 * 80/20 train-test split
-* stratified target distribution
-* fixed random state for reproducibility
+* stratified target distribution (maintain the ratio of data despite splitting it).
+* fixed random state for reproducibility (Computers do not actually randomly generate numbers, thus using 42 will reproduce the same results).
 
 The same train-test split was used across all models.
 
@@ -223,9 +223,9 @@ The same train-test split was used across all models.
 
 The Logistic Regression workflow included:
 
-* `OneHotEncoder` for categorical features
-* `StandardScaler` for numeric features
-* scikit-learn preprocessing pipeline
+* `OneHotEncoder` for categorical features (The models cannot interpret text, so it needs to be converted to numeric values. If the numeric values are sequenced, such as 1,2, or 3, the model might be biased towards larger numbers. OneHotEncoder avoids this by creating binary columns with 1s and 0s).
+* `StandardScaler` for numeric features (To avoid the model from being biased towards bigger values, as some categories like salary would obviously be greater than age, StandardScaler makes sure they are all treated equally).
+* scikit-learn preprocessing pipeline (Manually processing data each time can be prone to reproducibility issues such as human fatigue or error. A pipeline maintains consistent results with computer precision).
 
 This model served as the primary baseline classifier due to:
 
@@ -243,10 +243,10 @@ Several Decision Tree configurations were tested:
 
 The Decision Tree experiments explored:
 
-* non-linear split behavior
-* preprocessing tradeoffs
-* overfitting behavior
-* model complexity control
+* non-linear split behavior (Instead of drawing one line through data like a linear model, a decision tree breaks down a problem into hundreds or even thousands of split decisions of branches stacked on top of each other).
+* preprocessing tradeoffs (Decision Trees do not require StandardScalar because the trees find the best split based on an order or rank, instead of the magnitude).
+* overfitting behavior (The model has memorized the outcomes of the data rather than learning a pattern for recognizing the target)
+* model complexity control (The max-depth of a tree was limited to five to control overfitting)
 
 ---
 
@@ -355,8 +355,8 @@ Potential future improvements include:
 * integrating additional CMS hospital characteristics datasets
 * adding socioeconomic or regional healthcare variables
 * testing Random Forest or Gradient Boosting models
-* performing systematic hyperparameter tuning
-* using cross-validation
+* performing systematic hyperparameter tuning (Using algorithms like grid or randomized search instead of manually guessing to determine complexity controls like max_depth).
+* using cross-validation (Instead of slicing the data one time into an 80/20 split, Cross-Validation slices the training data and trains the model multiple times and averages the performance).
 * exploring probability threshold tuning for recall/precision tradeoffs
 
 ---

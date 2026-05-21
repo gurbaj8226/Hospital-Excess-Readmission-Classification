@@ -140,7 +140,7 @@ The project began with structural validation and cleaning of the CMS HRRP datase
 
 ### Missing Value Investigation
 
-Several variables contained structurally missing values tied to CMS reporting rules and suppression logic.
+Several variables contained missing values which can be attributed to CMS reporting rules and censorship.
 
 Common CMS footnotes included:
 
@@ -172,7 +172,7 @@ The target classes remained reasonably balanced after filtering:
 * approximately 54% positive class
 * approximately 46% negative class
 
-Because ERR values were densely concentrated near 1.0, the classification boundary was structurally difficult.
+Because ERR values were densely concentrated near 1.0, the classification boundary was inherently difficult.
 
 ---
 
@@ -203,7 +203,7 @@ The following variables were excluded due to leakage concerns or weak analytical
 
 ### Why Leakage Prevention Matters
 
-Several excluded variables are mathematically or operationally tied to the target variable. Including them could artificially inflate model performance without improving real generalization ability.
+Several excluded variables are directly tied, and can therefore reveal the target variable, either mathematically or operationally. Including them could artificially inflate model performance without actually improving the real generalization ability.
 
 This project prioritizes methodological defensibility over maximizing predictive accuracy.
 

@@ -140,7 +140,7 @@ The project began with structural validation and cleaning of the CMS HRRP datase
 
 ### Missing Value Investigation
 
-Several variables contained missing values which can be attributed to CMS reporting rules and censorship.
+Several variables contained missing values which can be attributed to CMS reporting rules and suppression logic.
 
 Common CMS footnotes included:
 
@@ -215,7 +215,7 @@ The dataset was split using:
 
 * 80/20 train-test split
 * stratified target distribution (maintain the ratio of data despite splitting it).
-* fixed random state for reproducibility (Computers do not actually randomly generate numbers, thus using 42 will reproduce the same results).
+* fixed random state for reproducibility (Fixed random state for reproducibility).
 
 The same train-test split was used across all models.
 
@@ -225,7 +225,7 @@ The Logistic Regression workflow included:
 
 * `OneHotEncoder` for categorical features (The models cannot interpret text, so it needs to be converted to numeric values. If the numeric values are sequenced, such as 1,2, or 3, the model might be biased towards larger numbers. OneHotEncoder avoids this by creating binary columns with 1s and 0s).
 * `StandardScaler` for numeric features (To avoid the model from being biased towards bigger values, as some categories like salary would obviously be greater than age, StandardScaler makes sure they are all treated equally).
-* scikit-learn preprocessing pipeline (Manually processing data each time can be prone to reproducibility issues such as human fatigue or error. A pipeline maintains consistent results with computer precision).
+* scikit-learn preprocessing pipeline (Manually processing data each time can be prone to reproducibility issues manual inconsistency or preprocessing errors. A pipeline maintains consistent results with computer precision).
 
 This model served as the primary baseline classifier due to:
 
@@ -319,7 +319,7 @@ The models identify statistical classification patterns within public reporting 
 1. Clone the repository
 
 ```bash
-git clone <repository-link>
+git clone <https://github.com/gurbaj8226/Hospital-Excess-Readmission-Classification>
 ```
 
 2. Install dependencies
@@ -364,4 +364,5 @@ Potential future improvements include:
 # Author
 
 Created by Gurbaj Singh
+
 Healthcare Data Analytics Portfolio Project

@@ -4,7 +4,7 @@ This project explores leakage-aware healthcare analytics classification using pu
 
 ## Project Overview
 
-This project seeks to answer whether publicly reported CMS hospital readmission performance data can be used to classify hospital-measure records with excess readmission ratios above 1.0. The workflow focuses on healthcare analytics modeling, using structured public reporting data from the CMS Hospital Readmissions Reduction Program (HRRP), while avoiding any sort of leakage.
+This project implements a full healthcare analytics classification workflow using CMS Hospital Readmissions Reduction Program (HRRP) data. The analysis includes structural data validation, leakage-aware feature selection, binary target construction, preprocessing pipelines, supervised classification modeling, and model comparison using Logistic Regression and Decision Tree classifiers.
 
 The project includes:
 
@@ -21,8 +21,6 @@ Two classification models were evaluated:
 
 * Logistic Regression
 * Decision Tree
-
-The project focuses on having a realistic healthcare analytics methodology, instead of maximizing predictive performance using variables exposing the model to leakage.
 
 ---
 

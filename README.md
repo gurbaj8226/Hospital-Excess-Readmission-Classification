@@ -1,5 +1,7 @@
 # Hospital Excess Readmission Classification Using CMS HRRP Data
 
+This project explores leakage-aware healthcare analytics classification using publicly reported CMS Hospital Readmissions Reduction Program (HRRP) data. Logistic Regression and Decision Tree models were developed to classify hospital-measure records with excess readmission ratios above 1.0 while emphasizing realistic feature selection, overfitting analysis, and methodological validity over inflated predictive performance.
+
 ## Project Overview
 
 This project seeks to answer whether publicly reported CMS hospital readmission performance data can be used to classify hospital-measure records with excess readmission ratios above 1.0. The workflow focuses on healthcare analytics modeling, using structured public reporting data from the CMS Hospital Readmissions Reduction Program (HRRP), while avoiding any sort of leakage.

@@ -2,6 +2,14 @@
 
 This project explores leakage-aware healthcare analytics classification using publicly reported CMS Hospital Readmissions Reduction Program (HRRP) data. Logistic Regression and Decision Tree models were developed to classify hospital-measure records with excess readmission ratios above 1.0 while emphasizing realistic feature selection, overfitting analysis, and methodological validity over inflated predictive performance.
 
+## Notebook Access
+
+GitHub may occasionally fail to render `.ipynb` files correctly. Use the nbviewer links below for reliable notebook viewing.
+
+1. [Data Cleaning and Structural Validation](https://nbviewer.org/github/gurbaj8226/Hospital-Excess-Readmission-Classification/blob/main/notebooks/01_data_cleaning_and_structural_validation.ipynb)
+2. [Target Definition and EDA](https://nbviewer.org/github/gurbaj8226/Hospital-Excess-Readmission-Classification/blob/main/notebooks/02_target_definition_and_eda.ipynb)
+3. [Baseline Classification Modeling](https://nbviewer.org/github/gurbaj8226/Hospital-Excess-Readmission-Classification/blob/main/notebooks/03_baseline_classification_modeling.ipynb)
+
 ## Project Overview
 
 This project implements a full healthcare analytics classification workflow using CMS Hospital Readmissions Reduction Program (HRRP) data. The analysis includes structural data validation, leakage-aware feature selection, binary target construction, preprocessing pipelines, supervised classification modeling, and model comparison using Logistic Regression and Decision Tree classifiers.
